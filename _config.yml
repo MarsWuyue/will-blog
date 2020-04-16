@@ -99,5 +99,5 @@ theme: chic
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/MarsWuyue/hexo-blog.git # https://bitbucket.org/JohnSmith/johnsmith.bitbucket.io
+  repo: https://github.com/MarsWuyue/will-blog.git # https://bitbucket.org/JohnSmith/johnsmith.bitbucket.io
   branch: gh-pages
