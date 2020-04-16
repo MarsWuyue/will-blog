@@ -13,7 +13,7 @@ head:
     open_graph:
         # Page title (og:title) (optional)
         # You should leave this blank for most of the time
-        title: 辣椒の酱
+        title: test
         # Page type (og:type) (optional)
         # You should leave this blank for most of the time
         type: blog
@@ -82,7 +82,7 @@ navbar:
         友链: /friend
         碎碎念: /self-talking
         留言: /message
-        关于: /about
+        关于123: /about
     # Links to be shown on the right of the navigation bar
     links:
         Download on GitHub:
