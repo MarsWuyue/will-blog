@@ -81,7 +81,7 @@ navbar:
         相册: /album
         友链: /friend
         碎碎念: /self-talking
-        留言: /message
+        留言456: /message
         关于123: /about
     # Links to be shown on the right of the navigation bar
     links:
