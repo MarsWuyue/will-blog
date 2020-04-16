@@ -12,6 +12,7 @@
     "version": "4.2.0"
   },
   "dependencies": {
+    "ajv": "^6.12.0",
     "bulma-stylus": "^0.8.0",
     "hexo": "^4.0.0",
     "hexo-generator-archive": "^1.0.0",
