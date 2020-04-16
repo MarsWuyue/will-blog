@@ -77,12 +77,12 @@ navbar:
         归档: /archives
         分类: /categories
         标签: /tags
-        影音: /media
-        相册: /album
-        友链: /friend
+        # 影音: /media
+        # 相册: /album
+        # 友链: /friend
         碎碎念: /self-talking
-        留言456: /message
-        关于123: /about
+        # 留言: /message
+        关于: /about
     # Links to be shown on the right of the navigation bar
     links:
         Download on GitHub:
@@ -326,8 +326,8 @@ comment:
     admin: ['removeif']
     create_issue_manually: true
     distraction_free_mode: false
-    has_hot_recommend: true # 是否有热门推荐
-    has_latest_comment: true #是否有最新评论
+    has_hot_recommend: false # 是否有热门推荐
+    has_latest_comment: false #是否有最新评论
 
 # comment:
 #     type: valine

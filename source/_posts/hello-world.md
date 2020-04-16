@@ -35,4 +35,17 @@ More info: [Generating](https://hexo.io/docs/generating.html)
 $ hexo deploy
 ```
 
+```java
+
+public class TestClass {
+    private String testField;
+
+    public String testMethod() {
+        String str = new String("123");
+        return str;
+    }
+}
+
+```
+
 More info: [Deployment](https://hexo.io/docs/one-command-deployment.html)
