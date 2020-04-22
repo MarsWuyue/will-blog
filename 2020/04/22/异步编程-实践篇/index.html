@@ -246,6 +246,10 @@
 <p>那么异步方法返回void是不是没用了？其实返回void的异步方法是有特殊用意的，他是给事件使用的，对于WinForm或者WPF这种UI系统，一是因为对于C/S程序，异常可以直接被最上层的同步上下文，由他来决定怎么处理，二是因为这个方法通常都是private的，所以也不需要进行测试。下面是官网给出的一个按钮点击事件的代码，</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; SynchronizationContext</span><br><span class="line">&#x2F;&#x2F; 这是界面按钮点击事件的方法，通常不需要测试这个方法本身</span><br><span class="line">private async void button1_Click(object sender, EventArgs e)</span><br><span class="line">&#123;</span><br><span class="line">  await Button1ClickAsync();</span><br><span class="line">&#125;</span><br><span class="line">public async Task Button1ClickAsync()</span><br><span class="line">&#123;</span><br><span class="line">  &#x2F;&#x2F; Do asynchronous work.</span><br><span class="line">  await Task.Delay(1000);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h3 id="官方建议"><a href="#官方建议" class="headerlink" title="官方建议"></a>官方建议</h3><ul>
+<li>IIS queue从默认的1000增大至5000</li>
+<li>ServicePointManager.DefaultConnectionLimit：作用是限制连接到同一个host的连接数，默认是cpu核数的12倍，可以根据需求合理设置</li>
+</ul>
 <p><strong><em>Note：上面只列举了一些简单用法和最佳实践，如果需要更多用法，建议参考微软官方文档</em></strong></p>
 
         </div>
@@ -296,6 +300,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/will-blog/2020/04/22/HttpClient%E7%AE%80%E8%BF%B0/">HttpClient介绍和最佳实践</a>
             
             
             <a class="next" rel="next" href="/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%A9%E5%B1%95%E7%AF%87/">异步编程-扩展篇</a>
