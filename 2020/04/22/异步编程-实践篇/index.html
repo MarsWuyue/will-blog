@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Will">
+
+
+
+
+
+<title>异步编程-实践篇 | Will&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/will-blog/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/will-blog/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/will-blog/js/script.js"></script>
+    
+    <script src="/will-blog/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/will-blog/">Will&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/will-blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/will-blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/will-blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/will-blog/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default" checked>
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/will-blog/">Will&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Dark</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/will-blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/will-blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/will-blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/will-blog/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">异步编程-实践篇</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Will</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 22, 2020&nbsp;&nbsp;14:34:17</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/will-blog/categories/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="异步编程没有被广泛应用吗"><a href="#异步编程没有被广泛应用吗" class="headerlink" title="异步编程没有被广泛应用吗"></a>异步编程没有被广泛应用吗</h2><p>我在<a href="https://marswuyue.github.io/will-blog/2020/04/20/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%AB%E7%9B%B2%E7%AF%87/">异步编程-扫盲篇</a>中分析了同步和异步编程的模式，并且也进行了比较，既然异步有那么多的好处，那么他为什么没有被广泛应用呢？其实在WPF和Winform应用中，异步已经被广泛应用了，比如按钮点击事件，这些都是异步操作，否则用户点一个按钮就卡住一会，体验得多差？但是在ASP.NET中似乎大家还是更中意使用同步模式，我分析有以下几点原因：</p>
+<ol>
+<li>同步编程模式更加符合人的思考模式</li>
+<li>异步代码“难维护”，“难调试”</li>
+<li>没有真正了解异步的原理，不敢用</li>
+<li>不想在业务代码中到处嵌套Task.Run等代码</li>
+</ol>
+<h2 id="如何写出优雅的异步代码-最佳实践"><a href="#如何写出优雅的异步代码-最佳实践" class="headerlink" title="如何写出优雅的异步代码-最佳实践"></a>如何写出优雅的异步代码-最佳实践</h2><p>可能是微软也意识到了上面开发人员遇到的问题，所以在ASP.NET 4.5中，引入了async/await，使用了他们的代码就几乎跟开发同步代码一样简单了，下面我们来看一下如何使用async/await来写出优雅的异步代码吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; 添加一个用户</span><br><span class="line">public async Task SaveUser(UserInfo user)</span><br><span class="line">&#123;</span><br><span class="line">    return await repo.saveUser(user);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F;&#x2F; 根据userId获取用户信息</span><br><span class="line">public async Task&lt;UserInfo&gt; GetUser(stirng userId)</span><br><span class="line">&#123;</span><br><span class="line">    return await repo.GetUser(userId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好了，只需要加上async和await，你就写好一个异步方法了，看起来很简单，那么下面我们通过对<strong><em>GetUser</em></strong>方法的一步一步扩展来了解以下异步编程的注意事项。</p>
+<h3 id="分析代码的执行原理"><a href="#分析代码的执行原理" class="headerlink" title="分析代码的执行原理"></a>分析代码的执行原理</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; 根据userId获取用户信息</span><br><span class="line">&#x2F;&#x2F;&#x2F; repo.GetUser(userId)是一个异步访问数据库的方法</span><br><span class="line">public async Task&lt;UserInfo&gt; GetUser(stirng userId)</span><br><span class="line">&#123;</span><br><span class="line">    var user &#x3D; await repo.GetUser(userId);</span><br><span class="line">    return new UserDTO(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我对<strong><em>GetUser</em></strong>这个方法加了一点点逻辑，需要将数据库返回的<strong><em>user</em></strong>转化为DTO进行传输。假设<strong><em>GetUser</em></strong>是Controller层，我们来分析一下代码的执行路径。<br>首先，系统接到客户端请求，从线程池中取出线程a，接收请求，执行<strong><em>GetUser</em></strong>方法。当系统运行到<code>var user = await repo.GetUser(userId);</code>这句代码，发现了await关键字，于是线程a在调用<code>repo.GetUser(userId)</code>后立刻返回线程池，并且把自己变成可用状态。当系统收到数据库查询完毕的通知后，再次从线程池中取出一个可用线程b，来处理<code>var user = await repo.GetUser(userId);</code>后续代码，即将<strong><em>user</em></strong>转换成<strong><em>UserDTO</em></strong>并返回给客户端。</p>
+<blockquote>
+<p>敲黑板：</p>
+<ol>
+<li>线程b和线程a可能是同一个线程，也可能是不同线程，系统会根据await那句代码的执行时间来判断是否让线程a返回线程池</li>
+<li>系统并不是在运行时才处理<strong><em>await</em></strong>关键字的，上面的描述只是为了让大家更易于理解，其实是在编译时就将这段代码编译成了状态机，具体实现细节可以参考<strong><em><a href="https://book.douban.com/subject/26285940/" target="_blank" rel="noopener">CLR via C#(第4版)</a></em></strong>中的“<strong><em>28.3 编译器如何将异步函数转换成状态机</em></strong>”。</li>
+</ol>
+</blockquote>
+<h3 id="Context丢失问题"><a href="#Context丢失问题" class="headerlink" title="Context丢失问题"></a>Context丢失问题</h3><p>看了上面执行原理的分析，大家应该会注意到一个问题，就是线程切换。执行<strong><em>await</em></strong>前后代码可能会使用不同的线程，通过下面的例子我们看一下线程切换带来的影响。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; 根据userId获取用户信息</span><br><span class="line">&#x2F;&#x2F;&#x2F; repo.GetUser(userId)是一个异步访问数据库的方法</span><br><span class="line">public async Task&lt;UserInfo&gt; GetUser(stirng userId)</span><br><span class="line">&#123;</span><br><span class="line">    var context1 &#x3D; HttpContext.Current;</span><br><span class="line">    var user &#x3D; await repo.GetUser(userId);</span><br><span class="line">    var context2 &#x3D; HttpContext.Current;</span><br><span class="line">    return new UserDTO(user);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意上面的代码，我们使用了<strong><em>HttpContext</em></strong>，此时如果线程a和线程b不是同一个线程，那么你会发现<strong><em>context1</em></strong>有值，而<strong><em>context2</em></strong>为null。所以在这种情况下尽量避免使用同步上下文。<br><strong><em>Note：这种上下文丢失未必发上，参考前面的“敲黑板2”，如果操作非常快，系统可能并未进行线程切换，此时上下文不会丢失</em></strong></p>
+<h3 id="为什么要求Async-All-the-Way"><a href="#为什么要求Async-All-the-Way" class="headerlink" title="为什么要求Async All the Way"></a>为什么要求Async All the Way</h3><p>讨论完同步上下文的问题，我们继续看一下怎么写一个死锁代码。还是刚才的例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; 这是一个同步方法</span><br><span class="line">public void Test()</span><br><span class="line">&#123;</span><br><span class="line">    var userTask &#x3D; GetUser(&quot;fakeUserId&quot;);</span><br><span class="line">    userTask.Result();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;&#x2F; 根据userId获取用户信息</span><br><span class="line">&#x2F;&#x2F;&#x2F; repo.GetUser(userId)是一个异步访问数据库的方法</span><br><span class="line">public async Task&lt;UserInfo&gt; GetUser(stirng userId)</span><br><span class="line">&#123;</span><br><span class="line">    return await repo.GetUser(userId);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>看一下上面的经典死锁代码，是不是看上去没什么问题？下面我们来分析一下他是怎么导致死锁的。<br>首先，当我调用<strong><em>Test</em></strong>方法的时候，假设由线程a执行，当运行到<strong><em>await</em></strong>时，await处理上下文的方式是在任务没有完成的时候，捕获当前上下文，等待任务完成进行方法的恢复，由于<strong><em>Test</em></strong>是同步代码，因此线程a始终没有释放，处于挂起状态，这时候当await的代码执行完成，他用之前捕获的上下文去恢复执行，由于one-chunk-at-a-time的机制，当前上下文中已经有一个线程a，所以系统会使用线程a去恢复执行，但是线程a又正在等待await的完成，这就导致了他们两个在互相等待的情况，于是就产生了死锁。</p>
+<p>那么为什么异步方法不会产生这个问题呢？根据我们上面的“分析代码的执行原理”部分可以知道，对于异步方法，当执行器看到<strong><em>await</em></strong>的时候，他会执行await方法，同时释放当前线程。等await方法执行完成，他会通过当前上下文唤起方法继续执行，此时当前上下文中就不存在线程，那么CLR会从线程池中取出一个空闲线程继续执行后面的方法，因此不存在死锁。</p>
+<p>所以我们如果使用异步，就应该从头到尾异步，这也说明了如果对一个同步代码进行异步重构，建议的方式是纵向重构。</p>
+<h3 id="什么时候使用ConfigureAwait"><a href="#什么时候使用ConfigureAwait" class="headerlink" title="什么时候使用ConfigureAwait"></a>什么时候使用ConfigureAwait</h3><p>看完死锁的例子，因为await代码捕获了当前上下文导致的，那么除了“Async All the Way”，我们还有个方法可以避免死锁，就是强制切换上下文。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F;&#x2F; 这是一个同步方法</span><br><span class="line">public void Test()</span><br><span class="line">&#123;</span><br><span class="line">    var userTask &#x3D; GetUser(&quot;fakeUserId&quot;);</span><br><span class="line">    userTask.Result();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;&#x2F; 根据userId获取用户信息</span><br><span class="line">&#x2F;&#x2F;&#x2F; repo.GetUser(userId)是一个异步访问数据库的方法</span><br><span class="line">public async Task&lt;UserInfo&gt; GetUser(stirng userId)</span><br><span class="line">&#123;</span><br><span class="line">    return await repo.GetUser(userId)</span><br><span class="line">        .ConfigureAwait(false);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>再看一下上面的代码，我在await后面加了个<code>.ConfigureAwait(false)</code>，这句代码的意思是使await代码的执行不使用当前上下文，这样就避免了死锁的产生。当然强制的上下文切换会导致在执行await后面的代码丢失上下文。</p>
+<p>官方建议我们在使用异步编程的时候，只要你能够确定不需要使用上下文，就建议await后面都加上<code>.ConfigureAwait(false)</code>，这么做对于GUI界面的好处更加显著，比如一个用户进行非常密集的操作，如果所有的按钮点击都使用同一个同步上下文等待恢复执行await后续代码，那么前端界面会出现卡顿的情况。</p>
+<h3 id="异步方法返回值建议使用“Task”而不是void"><a href="#异步方法返回值建议使用“Task”而不是void" class="headerlink" title="异步方法返回值建议使用“Task”而不是void"></a>异步方法返回值建议使用“Task”而不是void</h3><p>看一下上面的代码，如果你调用<strong><em>SaveUser</em></strong>保存用户，那么catch中永远捕获不到异常。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public async void SaveUserToDB(UserInfo user)</span><br><span class="line">&#123;</span><br><span class="line">    throw new Exception();</span><br><span class="line">&#125;</span><br><span class="line">&#x2F;&#x2F;&#x2F; 根据userId获取用户信息</span><br><span class="line">public async Task SaveUser(stirng userId)</span><br><span class="line">&#123;</span><br><span class="line">    try</span><br><span class="line">    &#123;</span><br><span class="line">        await SaveUserToDB(userId);</span><br><span class="line">    &#125;</span><br><span class="line">    catch (System.Exception)</span><br><span class="line">    &#123;</span><br><span class="line">        &#x2F;&#x2F; 在这里你永远捕获不到异常</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面的代码为什么捕获不到异常呢？其实是因为异步方法对于error的捕获形式不同，他是把异常捕获之后放到Task的对象中的，所以你的异步方法都没有返回的Task对象，必然就捕获不到异常，这个异常会一直被向上抛，直到被一个同步上下文接收到。</p>
+<p>那么除了用于捕获异常，通过返回Task来替代返回void的异步方法还有以下两点好处：</p>
+<ol>
+<li>提供后续操作，你可以取得异步方法的返回值然后做后续操作，比如WhenAny、WhenAll等</li>
+<li>便于测试，因为MSTest的异步测试只支持返回Task或者Task<T>的方法。</li>
+</ol>
+<p>那么异步方法返回void是不是没用了？其实返回void的异步方法是有特殊用意的，他是给事件使用的，对于WinForm或者WPF这种UI系统，一是因为对于C/S程序，异常可以直接被最上层的同步上下文，由他来决定怎么处理，二是因为这个方法通常都是private的，所以也不需要进行测试。下面是官网给出的一个按钮点击事件的代码，</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; SynchronizationContext</span><br><span class="line">&#x2F;&#x2F; 这是界面按钮点击事件的方法，通常不需要测试这个方法本身</span><br><span class="line">private async void button1_Click(object sender, EventArgs e)</span><br><span class="line">&#123;</span><br><span class="line">  await Button1ClickAsync();</span><br><span class="line">&#125;</span><br><span class="line">public async Task Button1ClickAsync()</span><br><span class="line">&#123;</span><br><span class="line">  &#x2F;&#x2F; Do asynchronous work.</span><br><span class="line">  await Task.Delay(1000);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong><em>Note：上面只列举了一些简单用法和最佳实践，如果需要更多用法，建议参考微软官方文档</em></strong></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Will</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://marswuyue.github.io/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E5%AE%9E%E8%B7%B5%E7%AF%87/">https://marswuyue.github.io/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E5%AE%9E%E8%B7%B5%E7%AF%87/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Will:</span>
+                         <span><strong>胜人者有力，自胜者强</strong></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/will-blog/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/"># 异步编程</a>
+                    
+                        <a href="/will-blog/tags/Asynchronous/"># Asynchronous</a>
+                    
+                        <a href="/will-blog/tags/async-await/"># async/await</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/will-blog/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%A9%E5%B1%95%E7%AF%87/">异步编程-扩展篇</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Will | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

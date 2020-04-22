@@ -12,7 +12,7 @@
 
 
 
-<title>Hello World | Will&#39;s Blog</title>
+<title>异步编程-扩展篇 | Will&#39;s Blog</title>
 
 
 
@@ -173,7 +173,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Hello World</h1>
+            <h1 class="post-title">异步编程-扩展篇</h1>
             
                 <div class="post-meta">
                     
@@ -182,14 +182,14 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">April 16, 2020&nbsp;&nbsp;19:13:12</a>
+                        Date: <a href="#">April 22, 2020&nbsp;&nbsp;13:50:16</a>
                         </span>
                     
                     
                         <span class="post-category">
                     Category:
                             
-                                <a href="/will-blog/categories/tst/">tst</a>
+                                <a href="/will-blog/categories/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
                             
                         </span>
                     
@@ -198,21 +198,30 @@
         </header>
 
         <div class="post-content">
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestClass</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String testField;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">testMethod</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String str = <span class="keyword">new</span> String(<span class="string">"123"</span>);</span><br><span class="line">        <span class="keyword">return</span> str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+            <h2 id="线程创建与销毁的代价"><a href="#线程创建与销毁的代价" class="headerlink" title="线程创建与销毁的代价"></a>线程创建与销毁的代价</h2><p>首先我们来从空间和时间上分析以下线程的开销。</p>
+<h3 id="空间开销"><a href="#空间开销" class="headerlink" title="空间开销"></a>空间开销</h3><p>线程包括以下几个需要空间开销的要素：</p>
+<ul>
+<li>线程内核对象<br>系统在初始化的时候给线程分配的数据结构，里面包括线程上下文，对于x86和x64系统，线程上下文分别使用约700和1240字节。</li>
+<li>线程环境块<br>线程环境块是在用户模式栈中分配的内存块，占用一个内存页（4KB），包含线程的异常处理链首。</li>
+<li>用户模式栈<br>占用1M内存，包含当前方法的局部变量和实参，以及一个指向当前方法返回后，线程应该从什么地方开始执行的地址</li>
+<li>内核模式栈<br>用于当应用程序的代码向系统中的内核模式函数传递实参时的栈，保存实参。32位Windows和64位Windows大小分别为12KB和24KB。</li>
+</ul>
+<h3 id="时间开销"><a href="#时间开销" class="headerlink" title="时间开销"></a>时间开销</h3><ul>
+<li>Windows的一个机制是在任何时候创建和销毁线程，都需要调用进程中加载的所有非托管DLL的DllMain方法，有的DLL需要获取通知，然后执行自己的初始化或者清理方法。</li>
+<li>每次上下文切换，Windows都需要做以下几件事<ul>
+<li>把CPU寄存器的值保存到当前线程的内核对象中</li>
+<li>从现有线程集合中找一个线程进行调用，如果这个线程属于另一个进程，那么CPU还必须切换到对应的内存空间</li>
+<li>将所选的上下文结构中的值加载到CPU寄存器中<br>Windows大约每30ms都会进行一次上下文切换，可见如果线程过多，那么在线程切换上的开销也是非常大的</li>
+</ul>
+</li>
+</ul>
+<h3 id="合理使用线程"><a href="#合理使用线程" class="headerlink" title="合理使用线程"></a>合理使用线程</h3><p>如果只关心性能，那么最优的线程数就是CPU的数目（对于多核CPU，每个核算一个CPU）。</p>
+<h2 id="Windows是如何处理异步I-O的"><a href="#Windows是如何处理异步I-O的" class="headerlink" title="Windows是如何处理异步I/O的"></a>Windows是如何处理异步I/O的</h2><p>下面我们以文件系统举例，来看一下Windows是如何来执行同步和异步I/O操作的，下图是系统从磁盘读取文件的流程</p>
+<h3 id="同步I-O"><a href="#同步I-O" class="headerlink" title="同步I/O"></a>同步I/O</h3><p>如下图，当我们使用同步I/O从文件读取数据时，系统按照从1-8的步骤将数据读出来，在第4步和第5步之间，硬盘正在进行文件读取，此时发出请求的线程处于睡眠状态，防止他浪费CPU的时间，当硬盘完成文件读取工作后，会唤醒线程，将文件数据一层一层的返回。<br><strong><em>Note：虽然中间线程处于睡眠状态，但是线程并没有释放，因此他占用的内存资源也都还存在内存中，内存依然被占用</em></strong><br><img src="sync-file.png" alt="sync-file"></p>
+<h3 id="异步I-O"><a href="#异步I-O" class="headerlink" title="异步I/O"></a>异步I/O</h3><p>如下图，我们利用<code>FileOptions.Asynchronous</code>实现文件的异步读取，此时读取的线程在经过从1-6六个步骤后直接返回，然后线程释放，回到线程池，当硬件设备读取完文件数据，会将任务放到CLR 线程池的任务队列中，即A，由CLR从线程池中选取空闲的线程进行处理，即B<br><img src="async-file.png" alt="async-file"></p>
+<blockquote>
+<p>上面两个图片参考自<strong><em><a href="https://book.douban.com/subject/26285940/" target="_blank" rel="noopener">CLR via C#(第4版)</a></em></strong></p>
+</blockquote>
 
         </div>
 
@@ -227,7 +236,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="https://marswuyue.github.io/will-blog/2020/04/16/hello-world/">https://marswuyue.github.io/will-blog/2020/04/16/hello-world/</a></span>
+                        <span><a href="https://marswuyue.github.io/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%A9%E5%B1%95%E7%AF%87/">https://marswuyue.github.io/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%A9%E5%B1%95%E7%AF%87/</a></span>
                     </p>
                 
                 
@@ -246,7 +255,9 @@
                 <span class="tag">
                     
                     
-                        <a href="/will-blog/tags/123/"># 123</a>
+                        <a href="/will-blog/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/"># 异步编程</a>
+                    
+                        <a href="/will-blog/tags/Asynchronous/"># Asynchronous</a>
                     
                         
                 </span>
@@ -259,6 +270,10 @@
         </section>
         <section class="post-nav">
             
+                <a class="prev" rel="prev" href="/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E5%AE%9E%E8%B7%B5%E7%AF%87/">异步编程-实践篇</a>
+            
+            
+            <a class="next" rel="next" href="/will-blog/2020/04/20/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%AB%E7%9B%B2%E7%AF%87/">异步编程-扫盲篇</a>
             
         </section>
 

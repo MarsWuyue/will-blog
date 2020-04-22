@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Will">
+
+
+
+
+
+<title>异步编程-扫盲篇 | Will&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/will-blog/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/will-blog/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/will-blog/js/script.js"></script>
+    
+    <script src="/will-blog/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/will-blog/">Will&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/will-blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/will-blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/will-blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/will-blog/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default" checked>
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/will-blog/">Will&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Dark</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/will-blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/will-blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/will-blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/will-blog/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">异步编程-扫盲篇</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Will</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 20, 2020&nbsp;&nbsp;22:57:25</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/will-blog/categories/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/">异步编程</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><h3 id="什么是异步编程"><a href="#什么是异步编程" class="headerlink" title="什么是异步编程"></a>什么是异步编程</h3><blockquote>
+<p><strong><em>Asynchrony</em></strong>, in computer programming, refers to the occurrence of events independent of the main program flow and ways to deal with such events.</p>
+</blockquote>
+<p>上面是wiki中对于异步的定义，关于<a href="https://en.wikipedia.org/wiki/Synchronization_(computer_science)" target="_blank" rel="noopener">同步</a>、<a href="https://en.wikipedia.org/wiki/Asynchrony_(computer_programming)" target="_blank" rel="noopener">异步</a>、<a href="https://en.wikipedia.org/wiki/Blocking_(computing)" target="_blank" rel="noopener">阻塞</a>和<a href="https://en.wikipedia.org/wiki/Non-blocking_algorithm" target="_blank" rel="noopener">非阻塞</a>的更多资料，大家可以参考wiki中给出的定义。</p>
+<h3 id="同步、异步、阻塞和非阻塞的解释"><a href="#同步、异步、阻塞和非阻塞的解释" class="headerlink" title="同步、异步、阻塞和非阻塞的解释"></a>同步、异步、阻塞和非阻塞的解释</h3><p>现在我们来通过一个通俗易懂的例子，来理解一下这四个词汇的区别：<br>eg：比如现在A需要跟B讨论晚上吃什么<br>    1. 同步/阻塞：A打电话给B，电话接通，两人开始讨论<br>    2. 非阻塞：A打电话给B，没人接，然后A每隔五分钟就再次打给B<br>    3. 异步：A打电话给B，没人接，A通过语音留言，让B给他回电话，然后A去做其他事情<br>通过上面的例子可以看出，通常同步和阻塞说的是一个事情，同步一定是阻塞的，而对于非阻塞和异步，在不同的场景可以有不同的解释，我们通常可以认为，异步是非阻塞的，但是非阻塞的实现形式不一定都是异步。</p>
+<h2 id="同步和异步工作模式的比较"><a href="#同步和异步工作模式的比较" class="headerlink" title="同步和异步工作模式的比较"></a>同步和异步工作模式的比较</h2><p>那么同步和异步的工作模式到底是怎么样的，下面我通过比较熟悉的WebAPI来举例，假设我们提供了一个通过用户ID获取用户信息的API，API从数据库获取用户信息，并返回给客户端，当请求到达我们的API时，CLR会从线程池中取出一个可用线程来接收请求。下面分别看一下同步和异步接下来的处理</p>
+<h3 id="同步的工作模式"><a href="#同步的工作模式" class="headerlink" title="同步的工作模式"></a>同步的工作模式</h3><ul>
+<li><strong>同步模式</strong></li>
+</ul>
+<p>同步的意思是整个操作串行进行，也就是说，线程1拿到请求参数，即用户ID，向数据库发起一个查询请求，然后将自己挂起，等待数据库处理，当数据库处理完成返回，线程1拿到返回的数据，返回给客户端。<br>在这个过程中可以看到，在数据库处理阶段，线程1处于闲置状态，此时它的CPU Time是0，直到数据库完成操作返回，线程1才继续工作，这对于线程来说是极大的浪费。<br>试想一下，如果我们线程池中只有两个线程，那么此时收到第三个客户端请求，会出现什么后果？不错，第三个请求会进入排队阶段，而此时另外两个线程却处于挂起状态，并没有工作要做，相当于我们的服务器在闲置状态。如下图所示：<br>    <img src="sync-1.png" alt="sync-1"></p>
+<ul>
+<li><strong>缺点</strong></li>
+</ul>
+<p>通过上面的分析可以看出，同步模式有以下几个缺点：</p>
+<ol>
+<li>线程资源浪费：线程在挂起状态时处于闲置</li>
+<li>CPU资源浪费：线程挂起，此时CPU Time为0</li>
+<li>吞吐量低：吞吐量取决于线程池中线程的数量，如果想要增加系统的吞吐量，就不得不通过增加线程池中线程数量的手段来实现，而线程过多会造成更多的负面影响，具体可以参考<a href="https://marswuyue.github.io/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%A9%E5%B1%95%E7%AF%87/">扩展篇：线程创建与销毁的代价</a></li>
+</ol>
+<h3 id="异步的工作模式"><a href="#异步的工作模式" class="headerlink" title="异步的工作模式"></a>异步的工作模式</h3><p>分析完同步的工作模式，下面我们来看一下异步是怎么处理请求的。当线程1拿到请求参数，即用户ID，线程1会向数据库发起一个查询请求，然后立刻返回到线程池，并且处于可用状态，即可以继续接收其他请求；当数据库处理完成返回，CLR会从线程池中取出一个可用线程，来继续处理返回的数据。如下图所示：<br><img src="async-1.png" alt="async-1"></p>
+<p>显而易见，异步操作不会阻塞线程，那么系统就有空闲线程来接收更多的客户端请求，从而增大系统的吞吐量，提高CPU的利用率。<br><strong><em>Note: 对于CLR如何处理异步I/O感兴趣的同学，可以参考<a href="https://marswuyue.github.io/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%A9%E5%B1%95%E7%AF%87/">扩展篇：Windows是如何处理异步I/O的</a></em></strong></p>
+<h3 id="比较"><a href="#比较" class="headerlink" title="比较"></a>比较</h3><p>先借用官方的一句话：</p>
+<blockquote>
+<p>Asynchronous code scales both further and faster than blocking thread pool threads.</p>
+</blockquote>
+<p>下面我们来解释以下scale further 和 scale faster的原因</p>
+<ul>
+<li>scale further<br>在现代操作系统上每个线程池线程具有 1MB 的堆栈，外加一个不分页的内核堆栈，如果面对高并发系统，通过增加线程数量来增加吞吐量，就会浪费很多内存开销，而对于异步来说，不需要过多的线程来处理请求，因此可以节约更多的内存空间做其他事。</li>
+<li>scale faster<br>由于线程池的注入速度是有限的，大概是每2秒一个线程，考虑一下如果突然爆发很多请求，那么请求就会将线程池中的线程全部用完，其余的请求就必须等待线程池注入新的线程。而异步代码就不会有这种烦恼，他可以更充分的利用线程池，也就是说，他可以更加灵活的响应请求数量的波动。</li>
+</ul>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>了解了同步和异步的工作模式之后，我们可以得出结论：</p>
+<ol>
+<li>对于CPU密集型应用，建议使用同步模式，避免线程切换带来的额外开销。</li>
+<li>对于I/O密集型应用，建议使用异步模式，增加线程和CPU的利用率，也可以增大系统的吞吐量。<br><strong><em>Note：数据库访问、Redis访问、请求第三方api以及文件读写，都属于I/O操作</em></strong></li>
+<li>异步不是银弹，它能够帮助你尽可能充分的利用服务器资源，达到纵向scale的能力，但是如果业务需要，仍然需要通过分布式系统进行横向scale</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Will</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://marswuyue.github.io/will-blog/2020/04/20/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%AB%E7%9B%B2%E7%AF%87/">https://marswuyue.github.io/will-blog/2020/04/20/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%AB%E7%9B%B2%E7%AF%87/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Will:</span>
+                         <span><strong>胜人者有力，自胜者强</strong></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/will-blog/tags/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B/"># 异步编程</a>
+                    
+                        <a href="/will-blog/tags/Asynchronous/"># Asynchronous</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/will-blog/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/will-blog/2020/04/22/%E5%BC%82%E6%AD%A5%E7%BC%96%E7%A8%8B-%E6%89%A9%E5%B1%95%E7%AF%87/">异步编程-扩展篇</a>
+            
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Will | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
