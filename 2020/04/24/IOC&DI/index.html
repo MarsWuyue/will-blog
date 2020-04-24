@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Will">
+
+
+
+
+
+<title>IOC 和 DI | Will&#39;s Blog</title>
+
+
+
+    <link rel="icon" href="/will-blog/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/will-blog/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/will-blog/js/script.js"></script>
+    
+    <script src="/will-blog/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/will-blog/">Will&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/will-blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/will-blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/will-blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/will-blog/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default" checked>
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/will-blog/">Will&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Dark</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/will-blog/archives">Posts</a>
+                
+                    <a class="menu-item" href="/will-blog/category">Categories</a>
+                
+                    <a class="menu-item" href="/will-blog/tag">Tags</a>
+                
+                    <a class="menu-item" href="/will-blog/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">IOC 和 DI</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Will</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 24, 2020&nbsp;&nbsp;10:01:31</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/will-blog/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">设计模式</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>我们经常都在说控制反转（IOC）和依赖注入（DI），在项目实践中也都在用，但是对他们的概念以及要解决的问题一知半解，希望看完这篇文章后，你可以了解到下面几个问题：</p>
+<ul>
+<li>什么是IOC？</li>
+<li>什么是DI？</li>
+<li>他们有什么区别和联系？</li>
+<li>为什么要使用他们/他们解决了什么问题？</li>
+</ul>
+<h2 id="IOC"><a href="#IOC" class="headerlink" title="IOC"></a>IOC</h2><h3 id="什么是IOC"><a href="#什么是IOC" class="headerlink" title="什么是IOC"></a>什么是IOC</h3><blockquote>
+<p>In software engineering, inversion of control (IoC) is a programming principle. IoC inverts the flow of control as compared to traditional control flow. In IoC, custom-written portions of a computer program receive the flow of control from a generic framework. A software architecture with this design inverts control as compared to traditional procedural programming: in traditional programming, the custom code that expresses the purpose of the program calls into reusable libraries to take care of generic tasks, but with inversion of control, it is the framework that calls into the custom, or task-specific, code.</p>
+</blockquote>
+<p>还是先把wiki上的定义贴出来，这里“traditional control flow”可以理解成传统的过程程序设计（procedural programming），这个定义就变成了“IOC 反转 传统的过程程序设计 的控制流程”，依然比较晦涩难懂，下面我们先看一个小例子：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class OrderService</span><br><span class="line">&#123;</span><br><span class="line">   public void CreateOrder(Order order)</span><br><span class="line">   &#123;</span><br><span class="line">       SaveOrder(order);</span><br><span class="line">       SendSMS(order);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   private static void SendSMS(Order order)</span><br><span class="line">   &#123;</span><br><span class="line">       &#x2F;&#x2F; 通过短信给用户发送订单创建成功的通知</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面我们先调用<strong><em>SaveOrder</em></strong>保存订单信息，然后再通过<strong><em>SendSMS</em></strong>方法来给用户发送短信通知。如果业务需求改成通过邮件通知用户呢？有点编程经验的人都知道，这时候我们就会抽象出一个通知接口，然后分别实现短信通知和邮件通知了：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class OrderService</span><br><span class="line">&#123;</span><br><span class="line">    private INotifierService notifierService;</span><br><span class="line">    public OrderService()</span><br><span class="line">    &#123;</span><br><span class="line">        notifierService &#x3D; new EmailNotifier();</span><br><span class="line">    &#125;</span><br><span class="line">   public void CreateOrder(Order order)</span><br><span class="line">   &#123;</span><br><span class="line">       SaveOrder(order);</span><br><span class="line">       notifierService.send(order);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>好了，通过上述改动，我们抽象出了一个INotifierService，然后他可以有EmailNotifier和SMSNotifier两种实现了，这回业务再想改，我们只要根据需求实现xxxNotifier即可。到目前为止，我们就实现了IOC了。<br>总结一下到底什么是IOC，其实IOC中所谓的“反转”，我认为可以理解成交出，那么，控制反转就是交出控制权，本来由OrderService负责的发送通知的功能交给NotifierService去做。理解了神秘的IOC之后，我们可以思考一下，其实IOC在我们编程过程中早就接触过了，做过WebForms的应该对<code>OnPageLoad()</code>方法不陌生吧？这其实就是控制反转，是框架把页面加载的控制权交给了应用程序（我们的业务代码），还有<em>代理（Delegates）、虚方法（Virtual Functions）和EventHandler</em>，这些其实都是控制反转。</p>
+<h3 id="为什么要用IOC"><a href="#为什么要用IOC" class="headerlink" title="为什么要用IOC"></a>为什么要用IOC</h3><p>解释完什么是IOC了，我们来看一下IOC的好处，其实从上面两个例子很容易看出，<em>IOC使代码更加灵活和松耦合，达到了易维护和易扩展的目的</em>，还是上面的例子，通知只是创建订单过程中的一个流程，所以OrderService应该专注于实现订单业务以及控制业务流程，不需要去关心如何实现通知相关的功能。</p>
+<h2 id="DI"><a href="#DI" class="headerlink" title="DI"></a>DI</h2><h3 id="什么是DI"><a href="#什么是DI" class="headerlink" title="什么是DI"></a>什么是DI</h3><p>老规矩，上wiki：</p>
+<blockquote>
+<p>In software engineering, dependency injection is a technique whereby one object supplies the dependencies of another object. A “dependency” is an object that can be used, for example as a service. Instead of a client specifying which service it will use, something tells the client what service to use. The “injection” refers to the passing of a dependency (a service) into the object (a client) that would use it. The service is made part of the client’s state.[1] Passing the service to the client, rather than allowing a client to build or find the service, is the fundamental requirement of the pattern.</p>
+</blockquote>
+<p>了解了IOC，那么我们还是回到刚才的例子，大家认为我们上面是好的设计吗？当然不是！虽然我们已经抽象了个EmailNotifier出来，但是对于OrderService来说，他还是得知道我应该用哪个实现类发通知，也就是说，如果业务又要修改为回访电话通知了，那我们不止要再实现个通知类，还需要修改OrderService中的代码，这显然不是什么好的设计，如果能改成下面这样呢：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class OrderService</span><br><span class="line">&#123;</span><br><span class="line">    private INotifierService notifierService;</span><br><span class="line">    public OrderService(INotifierService notifierService)</span><br><span class="line">    &#123;</span><br><span class="line">        this.notifierService &#x3D; notifierService;</span><br><span class="line">    &#125;</span><br><span class="line">   public void CreateOrder(Order order)</span><br><span class="line">   &#123;</span><br><span class="line">       SaveOrder(order);</span><br><span class="line">       notifierService.send(order);</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>哦了，这么看起来OrderService满意了，但是构造函数中的<code>INotifierService notifierService</code>哪儿来的？好了，DI开始它的表演了。<br>构造函数里面的参数是框架（比如java的Spring自带IOC容器，再比如LightInject和Autofac等）实现的，他们的实现方法就是提供一个容器，在程序启动的时候将你需要的东西都放到容器中，然后如果谁要用，容器就会自动把它给你。</p>
+<p>好了，总结一下，什么是DI，DI的意思就是你的依赖是被自动注进来的，你只需要提个需求，说你想依赖啥啥啥就行了，提需求的方式也是多种多样的，比如你可以把你的需求写在构造函数上，也可以通过属性标签提需求，具体的使用方法可以查阅你使用的框架的官方文档。</p>
+<h3 id="为什么用DI"><a href="#为什么用DI" class="headerlink" title="为什么用DI"></a>为什么用DI</h3><p>当然是DI好处多啊，上面已经展示过了，DI可以使你的代码进一步松耦合：比如上面的代码，自己体会</p>
+<p>下面我说一下一般的DI框架提供的其他附赠服务：</p>
+<ul>
+<li>代码简洁了：相信大家都曾经被new搞得头昏脑胀吧？我想要使用OrderService类，我需要new一个通知类，如果这个通知类的构造函数包括十几个参数，再如果你的OrderService依赖七八个其他类，你还要去了解每个依赖他们又需要依赖什么，这个递归做完估计头就已经昏了</li>
+<li>DI可以帮你实现单例：大家几乎都会在自己的Service中使用单例模式，使自己的service无状态，用DI，帮你直接搞定，少些了好几行代码，而且他还可以帮你控制单例的生命周期</li>
+<li>用了DI，妈妈再也不用担心你写单元测试了，比如Moq，和LigheInject很好的结合，写单元测试的时候只需要专注当前要测试的类即可，其他的一律Mock掉</li>
+</ul>
+<h2 id="IOC和DI"><a href="#IOC和DI" class="headerlink" title="IOC和DI"></a>IOC和DI</h2><p>IOC和DI经常一起出现，甚至还有一些文章说IOC和DI是一个东西，还经常用IOC/DI这种形式来表示，我对这种观点并不是很赞同。通过上面的分析其实很明确，IOC和DI解决的问题是不一样的。但是他们通常组合起来解决问题，网上有下面的说法，我比较赞同：</p>
+<ul>
+<li>IOC是设计原则，DI是设计模式，或者说是一种实现模式</li>
+</ul>
+<p>我认为不管他们叫什么，不管你是不是觉得“控制反转”中的“反转”表述的不正确（有人提议应该叫DOC，Delegate of control，我感觉也不错），这都不重要，重要的是理解他们到底是什么以及他们到底是用来解决什么问题的，并且能够在项目中合理运用。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Will</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="https://marswuyue.github.io/will-blog/2020/04/24/IOC&DI/">https://marswuyue.github.io/will-blog/2020/04/24/IOC&DI/</a></span>
+                    </p>
+                
+                
+                
+                     <p class="copyright-item">
+                         <span>Will:</span>
+                         <span><strong>胜人者有力，自胜者强</strong></span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/will-blog/tags/IOC/"># IOC</a>
+                    
+                        <a href="/will-blog/tags/DI/"># DI</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/will-blog/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/will-blog/2020/04/22/HttpClient%E7%AE%80%E8%BF%B0/">HttpClient介绍和最佳实践</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Will | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
